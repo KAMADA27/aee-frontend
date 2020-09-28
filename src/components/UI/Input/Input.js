@@ -46,13 +46,13 @@ const Input = props => {
   const [invalid, setInvalid] = useState(false);
   const [disabled, setDisabled] = useState(false);
   
-  if (props.invalid && props.shouldValidate && props.touched) {
-    setInvalid(true);
-  } 
+  // if (props.invalid && props.shouldValidate && props.touched) {
+  //   setInvalid(true);
+  // } 
 
-  if (props.elementConfig.disabled) {
-    setDisabled(true);
-  };
+  // if (props.elementConfig.disabled) {
+  //   setDisabled(true);
+  // };
 
   switch (props.elementType) {
     case('input'):

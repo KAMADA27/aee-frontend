@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+
+import * as actions from '../../store/actions/index';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 import Input from '../../components/UI/Input/Input';
 import { Success } from '../../components/UI/Button/Button';
@@ -60,6 +64,23 @@ const Auth = props => {
     }
   });
 
+  const inputChangedHandler = (event, inputIdentifier) => {
+    const updatedForm = updateObject(authForm, {
+      [inputIdentifier]: updateObject(authForm[inputIdentifier], {
+        value: event.target.value,
+        valid: checkValidity(event.target.value, authForm[inputIdentifier].validation),
+        touched: true
+      })
+    });
+
+    setAuthForm(updatedForm);
+  };
+
+  const authHandler = (event) => {
+    event.preventDefault();
+    this.props.onAuth(authForm.email.value, authForm.password.value);
+  };
+
   const formElementArray = [];
 
   for (let key in authForm) {
@@ -72,15 +93,15 @@ const Auth = props => {
   let form = formElementArray.map(formElement => (
     <Input 
       key={ formElement.id }
-      elementType={ formElement.elementType }
+      elementType={ formElement.config.elementType }
       elementConfig={ formElement.config.elementConfig }
-      value={ formElement.value }
+      value={ formElement.config.value }
       invalid={ !formElement.config.valid }
       shouldValidate={ formElement.config.validation }
       touched={ formElement.config.touched }
-      changed={ (event) => this.inputChangedHandler(event, formElement.id) }
+      changed={ (event) => inputChangedHandler(event, formElement.id) }
     />
-  ))
+  ));
 
   return (
     <StyledAuth>
@@ -91,6 +112,19 @@ const Auth = props => {
       </Form>
     </StyledAuth>
   );
-}
+};
 
-export default Auth;
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (email, password) => dispatch(actions.auth(email, password))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

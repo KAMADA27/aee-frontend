@@ -10,10 +10,6 @@ const Button = styled.button`
   padding: 10px;
   margin: 10px;
   font-weight: bold;
-
-  &:hover {
-    color: red;
-  }
 `;
 
 const Success = styled(Button)`
