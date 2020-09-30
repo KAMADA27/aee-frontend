@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseUrl: 'http://localhost:3000/api/v1/'
+  baseURL: 'http://localhost:3333/api/v1/',
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    "Access-Control-Allow-Origin": "*"
+  }
 });
 
 instance.interceptors.request.use(async config => {

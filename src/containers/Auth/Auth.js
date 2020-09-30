@@ -78,7 +78,7 @@ const Auth = props => {
 
   const authHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(authForm.email.value, authForm.password.value);
+    props.onAuth(authForm.email.value, authForm.password.value);
   };
 
   const formElementArray = [];
@@ -105,7 +105,7 @@ const Auth = props => {
 
   return (
     <StyledAuth>
-      <Form>
+      <Form onSubmit={ (event) => authHandler(event) }>
         { form }
         <Success width="100%">Entrar</Success>
         <ForgotPassword>Esqueceu a Senha?</ForgotPassword>

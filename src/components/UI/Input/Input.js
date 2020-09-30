@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import styled from 'styled-components';
 
 const StyledInput = styled.div`
@@ -43,24 +43,29 @@ const InputElement = styled.input`
 const Input = props => {
   let inputElement = null;
 
-  const [invalid, setInvalid] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  
-  // if (props.invalid && props.shouldValidate && props.touched) {
-  //   setInvalid(true);
-  // } 
+  const [invalidInput, setInvalidInput] = useState(false);
+  const [disabledInput, setDisabledInput] = useState(false);
 
-  // if (props.elementConfig.disabled) {
-  //   setDisabled(true);
-  // };
+  const { invalid, shouldValidate, touched } = props;
+  const { disabled } = props.elementConfig;
+  
+  useEffect(() => {
+    if (invalid && shouldValidate && touched) {
+      setInvalidInput(true);
+    } else if (disabled) {
+      setDisabledInput(true);
+    } else {
+      setInvalidInput(false);
+    }
+  }, [invalid, shouldValidate, touched, disabled])
 
   switch (props.elementType) {
     case('input'):
       inputElement = (
         <InputContainer>
           <InputElement 
-            invalid={ invalid }
-            disabled={ disabled }
+            invalid={ invalidInput }
+            disabled={ disabledInput }
             { ...props.elementConfig }
             value={ props.value }
             onChange={ props.changed }
