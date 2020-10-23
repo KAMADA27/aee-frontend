@@ -30,11 +30,11 @@ const InputElement = styled.input`
   width: 100%;
   box-sizing: border-box;
 
-  ${({ invalid }) => invalid && `
+  ${ ({ invalid }) => invalid && `
     border: 1px solid #ec2441;
   `}
 
-  ${({ disabled }) => disabled && `
+  ${ ({ disabled }) => disabled && `
     background-color: #ccc;
     color: #000;
   `}

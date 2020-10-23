@@ -51,10 +51,10 @@ export const auth = (email, password) => {
     axios.post('/auth/signin', authData)
       .then(response => {
         const expirationDate = new Date(new Date().getTime() + 1800 * 1000);
-        localStorage.setItem('token', response.data.data.token);
+        localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
-        localStorage.setItem('id', response.data.data.roles[0].id);
-        dispatch(authSuccess(response.data.data.token, response.data.data.id));
+        localStorage.setItem('id', response.data.user.id);
+        dispatch(authSuccess(response.data.token, response.data.user.id));
         dispatch(checkAuthTimeout(1800));
       }) 
       .catch(error => {
