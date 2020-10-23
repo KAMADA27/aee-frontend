@@ -7,6 +7,7 @@ import { updateObject, checkValidity } from '../../shared/utility';
 
 import Input from '../../components/UI/Input/Input';
 import { Success } from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const StyledAuth = styled.div`
   display: flex;
@@ -103,13 +104,21 @@ const Auth = props => {
     />
   ));
 
+  let auth = (
+    <Form onSubmit={ (event) => authHandler(event) }>
+      { form }
+      <Success width="100%">Entrar</Success>
+      <ForgotPassword>Esqueceu a Senha?</ForgotPassword>
+    </Form>
+  );
+
+  if (props.loading) {
+    auth = <Spinner />;
+  }
+
   return (
     <StyledAuth>
-      <Form onSubmit={ (event) => authHandler(event) }>
-        { form }
-        <Success width="100%">Entrar</Success>
-        <ForgotPassword>Esqueceu a Senha?</ForgotPassword>
-      </Form>
+      { auth }
     </StyledAuth>
   );
 };

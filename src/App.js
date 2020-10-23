@@ -6,6 +6,7 @@ import * as actions from './store/actions/index';
 
 import Auth from './containers/Auth/Auth';
 import Layout from './hoc/Layout/Layout';
+import Logout from './containers/Auth/Logout/Logout';
 
 const Users = React.lazy(() => import('./containers/Users/Users'));
 
@@ -26,6 +27,7 @@ const App = props => {
     routes = (
       <Layout>
         <Route path="/users" exact render={ props => <Users  { ...props } /> } />
+        <Route path="/logout" component={ Logout } />
       </Layout>
     );
   }

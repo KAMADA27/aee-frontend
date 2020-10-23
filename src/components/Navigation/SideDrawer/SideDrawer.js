@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
 import Backdrop from '../../UI/Backdrop/Backdrop';
+import NavigationItems from '../NavigationItems/NavigationItems';
 
 const StyledSideDrawer = styled.div`
   position: fixed;
@@ -28,6 +29,10 @@ const SideDrawer = props => (
     <Backdrop show={ props.open } clicked={ props.closed } />
     <StyledSideDrawer open={ props.open } onClick={ props.closed }>
       <span>Logo Teste</span>
+      <hr />
+      <nav>
+        <NavigationItems />
+      </nav>
     </StyledSideDrawer>
   </Fragment>
 );

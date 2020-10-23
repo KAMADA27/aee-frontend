@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DrawerToogle from '../SideDrawer/DrawerToogle/DrawerToogle';
@@ -19,9 +20,17 @@ const Header = styled.header`
 
 const StyledToolbar = styled.div`
   display: flex;
+  width: 100%;
   height: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+`;
+
+const NavLink = styled(Link)`
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
 `;
 
 const Toolbar = props => (
@@ -29,6 +38,7 @@ const Toolbar = props => (
     <Header>
       <StyledToolbar>
         <DrawerToogle clicked={ props.drawerToggleClicked } />
+        <NavLink to="/logout">Sair</NavLink>
       </StyledToolbar>
     </Header>
   </Fragment>
