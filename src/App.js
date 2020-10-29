@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import 'react-toastify/dist/ReactToastify.css';
 import * as actions from './store/actions/index';
 
 import Auth from './containers/Auth/Auth';
 import Layout from './hoc/Layout/Layout';
+import UserEdit from './containers/Users/UserEdit/UserEdit';
 import Logout from './containers/Auth/Logout/Logout';
+
+import Spinner from './components/UI/Spinner/Spinner';
 
 const Users = React.lazy(() => import('./containers/Users/Users'));
 
@@ -26,7 +30,9 @@ const App = props => {
   if (isAuthenticated) {
     routes = (
       <Layout>
-        <Route path="/users" exact render={ props => <Users  { ...props } /> } />
+        <Route path="/users" exact render={ props => <Users { ...props } /> } />
+        <Route path="/users/register" component={ UserEdit } />
+        <Route path="/users/edit/:id" component={ UserEdit } />
         <Route path="/logout" component={ Logout } />
       </Layout>
     );
@@ -35,7 +41,9 @@ const App = props => {
   return (
     <div>
       <Switch>
-        { routes }
+        <Suspense fallback={ <Spinner /> }>
+          { routes }
+        </Suspense>
       </Switch>
     </div>
   );

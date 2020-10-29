@@ -19,7 +19,9 @@ const Success = styled(Button)`
 `;
 
 const Danger = styled(Button)`
-  background-color: #944317;
+  width: ${ props => props.width };
+  border-radius: 5px;
+  background-color: #e60000;
 `;
 
 export { Success, Danger };

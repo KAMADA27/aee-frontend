@@ -9,11 +9,13 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/auth';
+import userReducer from './store/reducers/user';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  user: userReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

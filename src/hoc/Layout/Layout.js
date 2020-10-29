@@ -16,8 +16,9 @@ const Content = styled.div`
   margin: 100px 0;
 
   &:after {
-    content: '\00a0';
+    content: '00a0';
     display: block;
+    margin-top: 1.5em 0;
     height: 0;
     visibility: hidden;
   }
