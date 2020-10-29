@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
@@ -107,21 +107,22 @@ const UserEdit = props => {
     }
   });
   const [editMode, setEditMode] = useState(false);
+  const userFormRef = useRef(userForm);
 
-  // const updateUser = () => {
-  //   let updatedUser = { ...userForm };
+  const updateUser = useCallback(() => {
+    let updatedUser = { ...userFormRef.current };
 
-  //   for (let key in userForm) {
-  //     updatedUser = updateObject(updatedUser, {
-  //       [key]: updateObject(updatedUser[key], {
-  //         value: user[key],
-  //         valid: true
-  //       })
-  //     });
-  //   }
+    for (let key in userFormRef.current) {
+      updatedUser = updateObject(updatedUser, {
+        [key]: updateObject(updatedUser[key], {
+          value: user[key],
+          valid: true
+        })
+      });
+    }
 
-  //   setUserForm(updatedUser);
-  // }
+    setUserForm(updatedUser);
+  }, [user]);
   
   useEffect(() => {
     const id = props.match.params.id;
@@ -129,25 +130,17 @@ const UserEdit = props => {
     if (id) {
       setEditMode(true);
       onFetchUser(id);
+
+      delete userFormRef.current.password;
+      delete userFormRef.current.passwordConfirmation;
     }
-  }, [onFetchUser, props.match.params.id])
+  }, [onFetchUser, props.match.params.id]);
 
   useEffect(() => {
-    if (user) {
-      let updatedUser = { ...userForm };
-  
-      for (let key in userForm) {
-        updatedUser = updateObject(updatedUser, {
-          [key]: updateObject(updatedUser[key], {
-            value: user[key],
-            valid: true
-          })
-        });
-      }
-  
-      setUserForm(updatedUser);
+    if (user && editMode) {
+      updateUser();
     }
-  }, [user, userForm])
+  }, [user, editMode, updateUser]);
 
   const goBack = () => {
     props.history.goBack(); 
@@ -170,10 +163,10 @@ const UserEdit = props => {
   const validateForm = () => {
     let isValid = true;
     let updatedUserForm = { ...userForm };
-    const password = userForm['password'].value;
-    const passwordConfirmation = userForm['passwordConfirmation'].value;
+    const password = editMode ? null : userForm['password'].value;
+    const passwordConfirmation = editMode ? null : userForm['passwordConfirmation'].value;
 
-    if (password !== passwordConfirmation) {
+    if (password !== passwordConfirmation && !editMode) {
       isValid = false;
 
       toast.error(
@@ -216,8 +209,6 @@ const UserEdit = props => {
       userFormData[formElementIdentifier] = userForm[formElementIdentifier].value;
     }
 
-    userFormData.id = props.match.params.id;
-
     return userFormData;
   };
 
@@ -230,7 +221,7 @@ const UserEdit = props => {
     }
 
     const user = formDataHandler();
-    editMode ? props.onUpdateUser(user) : props.onSaveUser(user);
+    editMode ? props.onUpdateUser(props.match.params.id, user) : props.onSaveUser(user);
   };
 
   const formElementArray = [];
@@ -247,7 +238,7 @@ const UserEdit = props => {
   const form = (
     <Form>
       { formElementArray.map(formElement => (
-        <InputContainer>
+        <InputContainer key={ formElement.id }>
           <Input
             label={ formElement.config.label } 
             elementType={ formElement.config.elementType }
@@ -305,7 +296,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onSaveUser: (userData) => dispatch(actions.saveUser(userData)),
-    onUpdateUser: (userData) => dispatch(actions.updateUser(userData)),
+    onUpdateUser: (id, userData) => dispatch(actions.updateUser(id, userData)),
     onFetchUser: (id) => dispatch(actions.fetchUserById(id))
   };
 };

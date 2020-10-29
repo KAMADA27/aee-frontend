@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaSchool } from 'react-icons/fa';
 
 import NavigationItem from './NavigationItem/NavigationItem';
 
@@ -33,6 +33,12 @@ const NavigationItems = props => (
       <ItemContainer>
         <FaUser />
         Usuário
+      </ItemContainer>
+    </NavigationItem>
+    <NavigationItem link="/schools">
+      <ItemContainer>
+        <FaSchool />
+        Escola
       </ItemContainer>
     </NavigationItem>
   </StyledNavigationItems>

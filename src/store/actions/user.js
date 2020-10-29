@@ -127,7 +127,7 @@ export const saveUser = (userData) => {
 export const updateUser = (id, userData) => {
   return dispatch => {
     dispatch(updateUserStart());
-    axios.put('/user/' + id, userData)
+    axios.patch('/users/' + id, userData)
       .then(response => {
         const message = `${ userData.name } foi atualizado com sucesso!`;
         dispatch(updateUserSuccess(response.data.id, userData));
