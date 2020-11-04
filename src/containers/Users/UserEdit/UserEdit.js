@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -10,7 +11,7 @@ import Input from '../../../components/UI/Input/Input';
 import Card from '../../../components/UI/Card/Card';
 import { Success, Danger } from '../../../components/UI/Button/Button';
 import Toast from '../../../components/UI/Toast/Toast';
-import { Redirect } from 'react-router-dom';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 
 const StyledUserEdit = styled.div`
   display: flex;
@@ -275,6 +276,10 @@ const UserEdit = props => {
       </form>
     </Card>
   );
+
+  if (props.loading) {
+    userEdit = <Spinner />;
+  }
 
   return (
     <StyledUserEdit>

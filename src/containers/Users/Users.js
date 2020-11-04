@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ import { FaRegEdit, FaRegWindowClose } from "react-icons/fa";
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Card from '../../components/UI/Card/Card';
 import Table from '../../components/UI/Table/Table';
+import Modal from '../../components/UI/Modal/Modal';
 
 const StyledUsers = styled.div`
   display: flex;
@@ -26,15 +27,35 @@ const DeleteButton = styled.div`
 
 const Users = props => {
   const { onFetchUsers } = props;
+  const [deleting, setDeleting] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     onFetchUsers();
   }, [onFetchUsers]);
 
+  const addUserHandler = () => {
+    props.history.push('/users/register');
+  };
+
   const editUserHandler = (user) => {
     const id = user.id;
     props.history.push('/users/edit/' + id);
+  };
+
+  const confirmDeleteHandler = (row) => {
+    setDeleting(true);
+    setUser(row);
+  };
+
+  const deleteUserHandler = () => {
+    props.onDeleteUser(user.id);
+    setDeleting(false);
   }
+
+  const deleteCancelHandler = () => {
+    setDeleting(false);
+  };
 
   let userTable = <Spinner />;
   let userColumns = [
@@ -59,26 +80,37 @@ const Users = props => {
     },
     {
       name: 'Remover',
-      cell: (row) => <DeleteButton onClick={ () => this.confirmDeleteHandler(row) }><FaRegWindowClose /></DeleteButton>,
+      cell: (row) => <DeleteButton onClick={ () => confirmDeleteHandler(row) }><FaRegWindowClose /></DeleteButton>,
       ignoreRowClick: true,
       allowOverflow: true,
       button: true
     }
   ];
+  let modalMessage = null;
 
-  const addUserHandler = () => {
-    props.history.push('/users/register');
+  if (user) {
+    modalMessage = `Tem certeza que deseja remover o usuário: ${ user.name } ?`;
   }
 
   if (!props.loading) {
     userTable = (
-      <Table 
-        columns={ userColumns }
-        data={ props.users }
-        filterBy="name"
-        clicked={ addUserHandler }
-        btnName="Cadastrar Usuário"
-      />
+      <Fragment>
+         <Modal 
+            show={ deleting } 
+            modalClosed={ deleteCancelHandler }
+            confirmBtn={ true }
+            title="Remover Usuário"
+            confirmed={ deleteUserHandler }>
+              { modalMessage }
+          </Modal>
+        <Table 
+          columns={ userColumns }
+          data={ props.users }
+          filterBy="name"
+          clicked={ addUserHandler }
+          btnName="Cadastrar Usuário"
+        />
+      </Fragment>
     );
   }
 

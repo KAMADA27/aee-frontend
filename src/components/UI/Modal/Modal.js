@@ -13,26 +13,23 @@ const StyledModal = styled.div`
   position: fixed;
   z-index: 500;
   background-color: #fff;
-  border: 1px solid #ccc;
   box-shadow: 1px 1px 1px #000;
-  padding: 16px;
   top: 15%;
   max-height: 510px;
   overflow: auto;
   box-sizing: border-box;
   transition: all 0.3s ease-out;
+  border-radius: 10px;
 `;
 
 const ModalTitle = styled.div`
   text-transform: uppercase;
   font-size: 24px;
   font-weight: 500;
-  color: #ec2441;
+  color: #fff;
   border-bottom: 1px solid #ccc;
-
-  div {
-    margin-bottom: 15px;
-  }
+  padding: 10px;
+  background-color: #0099cc;
 `;
 
 const ModalBody = styled.div`
@@ -46,7 +43,7 @@ const ModalButton = styled.div`
   border-top: 1px solid #ccc;
 
   button {
-    margin-top: 20px;
+    margin: 20px 5px;
   }
 `;
 
@@ -71,7 +68,7 @@ const Modal = props => {
         <Danger onClick={ props.modalClosed }>
           Cancelar
         </Danger>
-        <Success clicked={ props.confirmed }>
+        <Success onClick={ props.confirmed }>
           Confirmar
         </Success>
       </ModalButton>
